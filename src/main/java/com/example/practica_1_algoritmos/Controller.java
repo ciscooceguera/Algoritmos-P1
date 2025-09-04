@@ -17,7 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import solitaire.SolitaireGame;
-
+import javafx.scene.effect.DropShadow;
 import java.util.Optional;
 
 public class Controller {
@@ -37,6 +37,9 @@ public class Controller {
     private final Button btnReciclar = new Button("Reciclar mazo"),
             btnSalir = new Button("Salir"),
             btnReset = new Button("Reset Juego");
+    // Efecto de hover
+    private final DropShadow EFECTO_HOVER = new DropShadow(18, Color.WHITE);
+    private final DropShadow EFECTO_SELECCION = new DropShadow(22, Color.web("#4fc3ff"));
 
     // Constantes
     private static double ANCHO_CARTA = 90;
@@ -47,6 +50,7 @@ public class Controller {
     private boolean haySeleccion = false;   // Determina si hay algo seleccionado
     private String origenSeleccion = "";    // Origen: WASTE o TABLEAU
     private int columnaSeleccionada = -1;   // 1 - 7 si origen es TABLEAU
+    private StackPane vistaSeleccionada = null; // Referencia a la carta actualmente seleccionada
 
     public Controller(BorderPane mainPane) {
         this.mainPane = mainPane;
@@ -278,9 +282,24 @@ public class Controller {
                 if (i == cartas.size() - 1 && !bocaAbajo) {
                     final int idxColTabla = col + 1; // Ajuste del índice, 1 - 7
                     vista.setCursor(Cursor.HAND);
+
+                    // HOVER
+                    vista.setOnMouseEntered(ev -> {
+                        if (vistaSeleccionada != vista) vista.setEffect(EFECTO_HOVER);
+                    });
+                    vista.setOnMouseExited(ev -> {
+                        if (vistaSeleccionada != vista) vista.setEffect(null);
+                    });
+
                     // Evento
                     vista.setOnMouseClicked(e -> {
                         if (e.getButton() != MouseButton.PRIMARY) return;
+                        // Al seleccionar origen, brillo celeste
+                        if (!haySeleccion) {
+                            vistaSeleccionada = vista;
+                            vista.setEffect(EFECTO_SELECCION);
+                        }
+
                         clickColumna(idxColTabla);
                         e.consume(); // Marca el evento como consumido
                     });
@@ -326,9 +345,21 @@ public class Controller {
             carta.setOnMouseClicked(e -> {
                 if (e.getButton() != MouseButton.PRIMARY) return;
                 if (haySeleccion) return;// Si ya hay una selección no mueve
+                // Brillo celeste al seleccionar el descarte
+                if (!haySeleccion) {
+                    vistaSeleccionada = carta;
+                    carta.setEffect(EFECTO_SELECCION);
+                }
                 haySeleccion = true;
                 origenSeleccion = "WASTE";// Determina origen waste
                 columnaSeleccionada = -1;// -1 ya que las columnas no son el destino
+            });
+            // HOVER blanco en la carta del descarte
+            carta.setOnMouseEntered(ev -> {
+                if (vistaSeleccionada != carta) carta.setEffect(EFECTO_HOVER);
+            });
+            carta.setOnMouseExited(ev -> {
+                if (vistaSeleccionada != carta) carta.setEffect(null);
             });
             descartePane.getChildren().add(carta);
         }
@@ -394,6 +425,11 @@ public class Controller {
         haySeleccion = false;
         origenSeleccion = "";
         columnaSeleccionada = -1;
+        // Si no hay seleccionado quita el brillo
+        if (vistaSeleccionada != null){
+            vistaSeleccionada.setEffect(null);
+            vistaSeleccionada = null;
+        }
     }
     // Se encarga de la selección/movimiento entre columnas o desde waste, recibe el índice
     private void clickColumna(int idxCol) {
