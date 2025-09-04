@@ -41,6 +41,7 @@ public class SolitaireGame {
         wastePile.addCartas(cards);
     }
 
+
     /**
      * Tomar la carta del Waste pile y ponerla en el tableau
      *
@@ -257,5 +258,11 @@ public class SolitaireGame {
         return str.toString();
     }
 
+    public FoundationDeck getFoundation(int index) {
+        return foundation.get(index); // índice 0..3 en el mismo orden de Palo.values()
+    }
 
+    public int getFoundationCount() {
+        return foundation.size(); // normalmente 4
+    }
 }

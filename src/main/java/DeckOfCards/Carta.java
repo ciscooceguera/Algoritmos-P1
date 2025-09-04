@@ -85,6 +85,9 @@ public abstract class Carta implements Comparable<Carta> {
     public int getValor() {
         return valor;
     }
+    public String getPaloString(){
+        return palo.getPaloString();
+    };
     public Palo getPalo() {
         return palo;
     }
