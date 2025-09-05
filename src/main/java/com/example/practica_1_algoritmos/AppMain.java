@@ -9,8 +9,8 @@ public class AppMain extends Application {
     @Override
     public void start(Stage stage) {
         BorderPane mainPane = new BorderPane();
+     //   new Controller(mainPane);
         new Controller(mainPane);
-
 
         Scene escena = new Scene(mainPane, 800, 600);
         stage.setTitle("Solitario");

@@ -11,12 +11,12 @@ import java.util.ArrayList;
  */
 public class DrawPile {
     private ArrayList<CartaInglesa> cartas;
-    private int cuantasCartasSeEntregan = 1;
+    private int cuantasCartasSeEntregan = 3;
 
     public DrawPile() {
         DeckOfCards.Mazo mazo = new DeckOfCards.Mazo();
         cartas = mazo.getCartas();
-        setCuantasCartasSeEntregan(1);
+        setCuantasCartasSeEntregan(3);
     }
 
     /**
