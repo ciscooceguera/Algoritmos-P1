@@ -1,6 +1,9 @@
 package DeckOfCards;
 
-public class Pila <T>{
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class Pila <T> implements Iterable<T> {
     private T[] pila;
     private int tope, size;
     public Pila(int size){
@@ -13,6 +16,9 @@ public class Pila <T>{
     }
     public boolean isFull(){
         return tope == size;
+    }
+    public int size(){
+        return size;
     }
     public void push(T dato){
         tope+=1;
@@ -37,5 +43,27 @@ public class Pila <T>{
             return null;
         }
         return pila[tope];
+    }
+    public Iterator<T> iterator(){
+        return new Iterator<T>(){
+            private int indice = tope;
+
+            public boolean hasNext(){
+                return indice >= 0;
+            }
+
+            public T next(){
+                if (!hasNext()){
+                    throw new NoSuchElementException();
+                }
+                return pila[indice--];
+            }
+        };
+    }
+
+    public void pushAll(Pila<T> pila){
+        for (T dato : pila){
+            push(dato);
+        }
     }
 }

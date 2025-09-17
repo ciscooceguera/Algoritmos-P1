@@ -2,6 +2,7 @@ package solitaire;
 
 import DeckOfCards.CartaInglesa;
 import DeckOfCards.Palo;
+import DeckOfCards.Pila;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  */
 public class FoundationDeck {
     Palo palo;
-    ArrayList<CartaInglesa> cartas = new ArrayList<>();
+    Pila<CartaInglesa> cartas = new Pila<>(60);
 
     public FoundationDeck(Palo palo) {
         this.palo = palo;
@@ -24,7 +25,7 @@ public class FoundationDeck {
         palo = carta.getPalo();
         // solo agrega la carta si es un A
         if (carta.getValorBajo() == 1) {
-            cartas.add(carta);
+            cartas.push(carta);
         }
     }
 
@@ -42,15 +43,15 @@ public class FoundationDeck {
             if (cartas.isEmpty()) {
                 if (carta.getValorBajo() == 1) {
                     // si no hay cartas entonces la carta debe ser un A
-                    cartas.add(carta);
+                    cartas.push(carta);
                     agregado = true;
                 }
             } else {
                 // si hay cartas entonces debe haber secuencia
-                CartaInglesa ultimaCarta = cartas.getLast();
+                CartaInglesa ultimaCarta = cartas.peek();
                 if (ultimaCarta.getValorBajo() + 1 == carta.getValorBajo()) {
                     // agregar la carta si el la siguiente a la última
-                    cartas.add(carta);
+                    cartas.push(carta);
                     agregado = true;
                 }
             }
@@ -66,8 +67,7 @@ public class FoundationDeck {
     CartaInglesa removerUltimaCarta() {
         CartaInglesa ultimaCarta = null;
         if (!cartas.isEmpty()) {
-            ultimaCarta = cartas.getLast();
-            cartas.remove(ultimaCarta);
+            ultimaCarta = cartas.pop();
         }
         return ultimaCarta;
     }
@@ -100,7 +100,7 @@ public class FoundationDeck {
     public CartaInglesa getUltimaCarta() {
         CartaInglesa ultimaCarta = null;
         if (!cartas.isEmpty()) {
-            ultimaCarta = cartas.getLast();
+            ultimaCarta = cartas.peek();
         }
         return ultimaCarta;
     }
