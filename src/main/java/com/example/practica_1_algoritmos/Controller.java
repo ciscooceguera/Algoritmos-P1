@@ -2,6 +2,7 @@ package com.example.practica_1_algoritmos;
 
 import DeckOfCards.CartaInglesa;
 import DeckOfCards.Palo;
+import DeckOfCards.Pila;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,6 +15,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import solitaire.RegistroMovimiento;
 import solitaire.SolitaireGame;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
@@ -34,10 +36,15 @@ public class Controller {
     // Tablero gráfico
     private final TableroGrafico tableroGrafico;
 
+    // Pila registro de movimientos
+    private Pila<RegistroMovimiento> registroMovimientos;
+
     // Botones
     private final Button btnReciclar = new Button("Reciclar mazo"),
             btnSalir = new Button("Salir"),
-            btnReset = new Button("Reset Juego");
+            btnReset = new Button("Reset Juego"),
+            btnUndo = new Button("Undo");
+
 
     // Constantes
     private static double ANCHO_CARTA = 90;
@@ -110,6 +117,13 @@ public class Controller {
             refrescar();
         });
 
+        // Undo movimiento
+        btnUndo.setOnAction(e -> {
+            game.undo();
+            refrescar();
+        });
+        btnUndo.setPrefWidth(ANCHO_CARTA);
+
         // Salir con confirmación
         btnSalir.setOnAction(e -> confirmarSalida());
         btnSalir.setPrefWidth(ANCHO_CARTA);
@@ -149,7 +163,7 @@ public class Controller {
                 fundacionesPanes[0], fundacionesPanes[1], fundacionesPanes[2], fundacionesPanes[3]
         );
         // Fila inferior, agrego los botones
-        filaInferior.getChildren().setAll(btnReset, btnSalir);
+        filaInferior.getChildren().setAll(btnReset, btnSalir,btnUndo);
         // agrego los elementos al panel principal
         mainPane.setTop(filaSuperior);
         mainPane.setBottom(filaInferior);
@@ -215,6 +229,7 @@ public class Controller {
         actualizarBotonReciclar();
         dibujarTablero();
         dibujarFundaciones();
+        actualizarBtnUndo();
     }
 
     // Dibuja las 4 fundaciones
@@ -378,5 +393,9 @@ public class Controller {
             limpiarSeleccion();
             if (movido) refrescar();
         }
+    }
+
+    private void actualizarBtnUndo(){
+        btnUndo.setDisable(!game.habilitarUndo());
     }
 }
