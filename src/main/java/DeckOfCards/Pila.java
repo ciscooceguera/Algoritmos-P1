@@ -12,35 +12,33 @@ public class Pila <T> implements Iterable<T> {
         tope = -1;
     }
     public boolean isEmpty(){
-        return tope == -1;
+        return tope < 0;
     }
     public boolean isFull(){
-        return tope == size;
+        return tope == size-1;
     }
     public int size(){
-        return size;
+        return tope+1;
     }
     public void push(T dato){
-        tope+=1;
-        if (tope == size){
-            System.out.println("Desbordamiento");
-            return;
+        if (isFull()){
+            throw new IllegalStateException("Desbordamiento");
         }
+        tope+=1;
         pila[tope] = dato;
     }
     public T pop(){
-        if (tope == -1){
-            System.out.println("Subdesbordamiento");
-            return null;
+        if (tope<0){
+            throw new NoSuchElementException("Subdesbordamiento");
         }
         T dato = pila[tope];
+        pila[tope] = null;
         tope-=1;
         return dato;
     }
     public T peek(){
-        if (tope == -1){
-            System.out.println("Pila vacia");
-            return null;
+        if (tope < 0){
+            throw new NoSuchElementException("Pila vacía");
         }
         return pila[tope];
     }
