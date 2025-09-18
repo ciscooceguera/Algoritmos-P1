@@ -1,6 +1,8 @@
 package solitaire;
 
 import DeckOfCards.CartaInglesa;
+import DeckOfCards.Mazo;
+import DeckOfCards.Pila;
 
 import java.util.ArrayList;
 
@@ -10,12 +12,17 @@ import java.util.ArrayList;
  * @version 2025
  */
 public class DrawPile {
-    private ArrayList<CartaInglesa> cartas;
+    private Pila<CartaInglesa> cartas;
     private int cuantasCartasSeEntregan = 3;
 
     public DrawPile() {
-        DeckOfCards.Mazo mazo = new DeckOfCards.Mazo();
-        cartas = mazo.getCartas();
+        Mazo mazo = new Mazo();
+        cartas = new Pila<> (52);
+        ArrayList<CartaInglesa> cartasArray = mazo.getCartas();
+
+        for (int i = cartasArray.size() - 1; i >= 0; i--) {
+            cartas.push(cartasArray.get(i));
+        }
         setCuantasCartasSeEntregan(3);
     }
 
@@ -47,7 +54,7 @@ public class DrawPile {
     public ArrayList<CartaInglesa> getCartas(int cantidad) {
         ArrayList<CartaInglesa> retiradas = new ArrayList<>();
         for (int i = 0; i < cantidad; i++) {
-            retiradas.add(cartas.remove(0));
+            retiradas.add(cartas.pop());
         }
         return retiradas;
     }
@@ -60,10 +67,10 @@ public class DrawPile {
      */
     public ArrayList<CartaInglesa> retirarCartas() {
         ArrayList<CartaInglesa> retiradas = new ArrayList<>();
-        int maximoARetirar = cartas.size() < cuantasCartasSeEntregan ? cartas.size() : cuantasCartasSeEntregan;
+        int maximoARetirar = Math.min(cartas.size(), cuantasCartasSeEntregan);
 
-        for (int i = 0; i < maximoARetirar; i++) {
-            CartaInglesa retirada = cartas.remove(0);
+        for (int i = 0; i < maximoARetirar && !cartas.isEmpty(); i++) {
+            CartaInglesa retirada = cartas.pop();
             retirada.makeFaceUp();
             retiradas.add(retirada);
         }
@@ -75,15 +82,11 @@ public class DrawPile {
      * @return true si hay cartas, false si no.
      */
     public boolean hayCartas() {
-        return cartas.size() > 0;
+        return !cartas.isEmpty();
     }
 
     public CartaInglesa verCarta() {
-        CartaInglesa regresar = null;
-        if (!cartas.isEmpty()) {
-            regresar = cartas.getLast();
-        }
-        return regresar;
+        return cartas.isEmpty() ? null : cartas.peek();
     }
     /**
      * Agrega las cartas recibidas al monton y las voltea
@@ -91,9 +94,15 @@ public class DrawPile {
      * @param cartasAgregar cartas que se agregan
      */
     public void recargar(ArrayList<CartaInglesa> cartasAgregar) {
-        cartas = cartasAgregar;
-        for (CartaInglesa aCarta : cartas) {
-            aCarta.makeFaceDown();
+        for (CartaInglesa carta : cartasAgregar) {
+            carta.makeFaceDown();
+        }
+        while (!cartas.isEmpty()) {
+            cartas.pop();
+        }
+
+        for (int i = 0; i< cartasAgregar.size(); i++) {
+            cartas.push(cartasAgregar.get(i));
         }
     }
 
@@ -103,5 +112,16 @@ public class DrawPile {
             return "-E-";
         }
         return "@";
+    }
+    public void regresarMovimiento(CartaInglesa carta) {
+        carta.makeFaceDown();
+        this.cartas.push(carta);
+    }
+    public ArrayList<CartaInglesa> popN(int N){
+        ArrayList<CartaInglesa> retiradas = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            retiradas.add(cartas.pop());
+        }
+        return retiradas;
     }
 }

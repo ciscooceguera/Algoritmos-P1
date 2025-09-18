@@ -194,4 +194,42 @@ public class TableauDeck {
     public ArrayList<CartaInglesa> getCards() {
         return cartas;
     }
+
+    public ArrayList<CartaInglesa> removerUltima(int n){
+        ArrayList<CartaInglesa> removerArray = new ArrayList<>();
+        if (n<=0){
+            return removerArray;
+        }
+        int inicio = Math.max(0,cartas.size() - n);
+        while (cartas.size() > inicio){
+            CartaInglesa carta = cartas.remove(cartas.size() - 1);
+            removerArray.add(0, carta);
+        }
+        return removerArray;
+    }
+
+    public void agregarDirecto(ArrayList<CartaInglesa> cartas) {
+        if (cartas.isEmpty() || cartas == null) {
+            return;
+        }
+        this.cartas.addAll(cartas);
+    }
+    public void agregarCartaDirecto(CartaInglesa ultimaCarta, boolean volteo) {
+        if (ultimaCarta == null) {
+            return;
+        }
+        if (volteo){
+            ultimaCarta.makeFaceUp();
+        }else{
+            ultimaCarta.makeFaceDown();
+        }
+        cartas.add(ultimaCarta);
+    }
+    public CartaInglesa getPenultimaCarta(){
+        if (cartas.size() >= 2){
+            return cartas.get(cartas.size() - 2);
+        }
+        return null;
+    }
+
 }

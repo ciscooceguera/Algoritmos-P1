@@ -1,6 +1,7 @@
 package solitaire;
 
 import DeckOfCards.CartaInglesa;
+import DeckOfCards.Pila;
 
 import java.util.ArrayList;
 /**
@@ -11,21 +12,28 @@ import java.util.ArrayList;
  * @version (2025-2)
  */
 public class WastePile {
-    private ArrayList<CartaInglesa> cartas;
+    private Pila<CartaInglesa> cartas;
 
     public WastePile() {
-        cartas = new ArrayList<>();
+        cartas = new Pila<>(52);
     }
 
     public void addCartas(ArrayList<CartaInglesa> nuevas) {
-        cartas.addAll(nuevas);
+        for (CartaInglesa carta : nuevas) {
+            cartas.push(carta);
+        }
+    }
+
+    public void addCarta(CartaInglesa carta) {
+        if (carta != null){
+            cartas.push(carta);
+        }
     }
 
     public ArrayList<CartaInglesa> emptyPile() {
         ArrayList<CartaInglesa> pile = new ArrayList<>();
-        if (!cartas.isEmpty()) {
-            pile.addAll(cartas);
-            cartas = new ArrayList<>();
+        while (!cartas.isEmpty()) {
+            pile.add(cartas.pop());
         }
         return pile;
     }
@@ -35,34 +43,19 @@ public class WastePile {
      * @return Carta que está encima. Si está vacía, es null.
      */
     public CartaInglesa verCarta() {
-        CartaInglesa regresar = null;
-        if (!cartas.isEmpty()) {
-            regresar = cartas.getLast();
-        }
-        return regresar;
+        return cartas.isEmpty() ? null : cartas.peek();
     }
     public CartaInglesa getCarta() {
-        CartaInglesa regresar = null;
-        if (!cartas.isEmpty()) {
-            regresar = cartas.removeLast();
-        }
-        return regresar;
+        return cartas.isEmpty() ? null : cartas.pop();
     }
 
     @Override
     public String toString() {
-        StringBuilder stb = new StringBuilder();
-        if (cartas.isEmpty()) {
-            stb.append("---");
-        } else {
-            CartaInglesa regresar = cartas.getLast();
-            regresar.makeFaceUp();
-            stb.append(regresar.toString());
-        }
-        return stb.toString();
+        return cartas.isEmpty() ? "[]" : cartas.peek().toString();
     }
 
     public boolean hayCartas() {
         return !cartas.isEmpty();
     }
+
 }
