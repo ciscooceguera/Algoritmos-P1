@@ -395,6 +395,7 @@ public class Controller {
         }
     }
 
+    // Habilita/Inhabilita el botón undo
     private void actualizarBtnUndo(){
         btnUndo.setDisable(!game.habilitarUndo());
     }

@@ -297,7 +297,10 @@ public class SolitaireGame {
     public int getFoundationCount() {
         return foundation.size(); // normalmente 4
     }
-
+    /*
+    * Lógica del undo, utilizando la pila de tipo RegistroMovimiento, dependiendo del caso
+    * se ejecuta el movimiento contrario
+     */
     public boolean undo() {
         if (registroMovimientos.isEmpty()) return false;
 

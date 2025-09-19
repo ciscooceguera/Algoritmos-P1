@@ -113,10 +113,12 @@ public class DrawPile {
         }
         return "@";
     }
+    // Recibe la carta la voltea hacia abajo y la coloca en la pila
     public void regresarMovimiento(CartaInglesa carta) {
         carta.makeFaceDown();
         this.cartas.push(carta);
     }
+    // Recibe cuántas cartas se harán pop y les hace utilizando un ciclo for
     public ArrayList<CartaInglesa> popN(int N){
         ArrayList<CartaInglesa> retiradas = new ArrayList<>();
         for (int i = 0; i < N; i++) {

@@ -194,7 +194,7 @@ public class TableauDeck {
     public ArrayList<CartaInglesa> getCards() {
         return cartas;
     }
-
+    // Remueve n cartas
     public ArrayList<CartaInglesa> removerUltima(int n){
         ArrayList<CartaInglesa> removerArray = new ArrayList<>();
         if (n<=0){
@@ -207,13 +207,16 @@ public class TableauDeck {
         }
         return removerArray;
     }
-
+    // Agrega directo al tableau sin valorar si es un movimiento válido,
+    // este método se implementa principalmente para el undo()
     public void agregarDirecto(ArrayList<CartaInglesa> cartas) {
         if (cartas.isEmpty() || cartas == null) {
             return;
         }
         this.cartas.addAll(cartas);
     }
+    // Agrega directo una carta sin valorar si es un movimiento válido
+    // y la acomoda, ya que es la última carta en la columna
     public void agregarCartaDirecto(CartaInglesa ultimaCarta, boolean volteo) {
         if (ultimaCarta == null) {
             return;
