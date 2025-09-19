@@ -5,6 +5,7 @@ import DeckOfCards.CartaInglesa;
 import java.util.ArrayList;
 
 public class RegistroMovimiento {
+    // Atributos para almcenar información de los movimientos realizados
      String tipoMovimiento;
 
      int origenTableau = -1;
@@ -15,6 +16,8 @@ public class RegistroMovimiento {
 
      CartaInglesa carta;
      ArrayList<CartaInglesa> cartas;
+
+     // Métodos para cada movimiento realizado
 
     public static RegistroMovimiento draw(int n) {
         RegistroMovimiento movimiento = new RegistroMovimiento();
